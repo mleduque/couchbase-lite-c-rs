@@ -71,6 +71,13 @@ impl Database {
         Document::from_raw(self.db, doc)
     }
 
+    /// Creates a new, empty document in memory with a generated id.
+    /// It will not be added to a database until saved.
+    pub fn create_document_auto_id(&self) -> Document {
+        let doc = unsafe { ffi::CBLDocument_New(ptr::null()) };
+        Document::from_raw(self.db, doc)
+    }
+
     /// Fetches a document with given id (if there is one).
     pub fn get_document(&self, id: String) -> Option<Document> {
         let doc_id = to_ptr(id);
