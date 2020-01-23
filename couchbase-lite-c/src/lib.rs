@@ -12,6 +12,7 @@ pub use database::*;
 pub use document::*;
 pub use errors::*;
 pub use query::*;
+pub use log::*;
 pub use replicator::*;
 pub use resultset::*;
 
@@ -19,6 +20,7 @@ mod authenticator;
 mod database;
 mod document;
 mod errors;
+mod log;
 mod query;
 mod replicator;
 mod resultset;

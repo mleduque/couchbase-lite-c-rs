@@ -36,6 +36,7 @@ fn bindgen_common() -> bindgen::Builder {
     .whitelist_function("CBLBlob_.*")
     .whitelist_function("CBLReplicator_.*")
     .whitelist_function("CBLAuth_.*")
+    .whitelist_function("CBL_SetLogLevel")
     .prepend_enum_name(false)
     .clang_arg("-I./libCouchbaseLiteC/vendor/couchbase-lite-core/vendor/fleece/API/")
     .clang_arg("-I./libCouchbaseLiteC/include/cbl")
