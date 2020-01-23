@@ -34,12 +34,18 @@ impl Replicator {
                     buf: std::ptr::null(),
                     size: 0,
                 },
+                trustedRootCertificates:  ffi::FLSlice {
+                    buf: std::ptr::null(),
+                    size: 0,
+                },
                 headers: std::ptr::null(),
                 channels: std::ptr::null(),
                 documentIDs: std::ptr::null(),
                 pushFilter: None,
                 pullFilter: None,
-                filterContext: std::ptr::null_mut(),
+                conflictResolver: None,
+                context: std::ptr::null_mut(),
+                proxy: std::ptr::null(),
             };
             ffi::CBLReplicator_New(&config, &mut error)
         };
@@ -70,12 +76,18 @@ impl Replicator {
                     buf: std::ptr::null(),
                     size: 0,
                 },
+                trustedRootCertificates:  ffi::FLSlice {
+                    buf: std::ptr::null(),
+                    size: 0,
+                },
                 headers: std::ptr::null(),
                 channels: std::ptr::null(),
                 documentIDs: std::ptr::null(),
                 pushFilter: None,
                 pullFilter: None,
-                filterContext: std::ptr::null_mut(),
+                conflictResolver: None,
+                context: std::ptr::null_mut(),
+                proxy: std::ptr::null(),
             };
             ffi::CBLReplicator_New(&config, &mut error)
         };
