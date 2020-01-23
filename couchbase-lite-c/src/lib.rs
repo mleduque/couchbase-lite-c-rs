@@ -40,3 +40,15 @@ fn to_ptr(string: String) -> *const c_char {
     mem::forget(cs);
     ptr
 }
+
+/// Logs the class and address of each Couchbase Lite object. Useful for leak checking."
+///
+/// Note:  May only be functional in debug builds of Couchbase Lite.
+pub fn debug_dump_instances() {
+    unsafe { ffi::CBL_DumpInstances() };
+}
+
+/// Returns the total number of Couchbase Lite objects. Useful for leak checking.
+pub fn debug_instance_count() -> u32 {
+    unsafe { ffi::CBL_InstanceCount() }
+}

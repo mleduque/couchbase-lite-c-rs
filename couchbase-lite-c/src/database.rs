@@ -38,10 +38,8 @@ impl Database {
         };
         let db = unsafe { ffi::CBLDatabase_Open(database_name, &config, &mut error) };
         if error.code == 0 {
-            println!("open database status: {:?} (OK)", error);
             Ok(Database::from(db))
         } else {
-            println!("open database error: {:?}", error);
             Err(CouchbaseLiteError::CannotOpenDatabase(error))
         }
     }
