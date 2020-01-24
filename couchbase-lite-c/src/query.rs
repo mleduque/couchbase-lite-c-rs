@@ -1,3 +1,6 @@
+
+use std::ffi::CStr;
+
 use ffi;
 
 use crate::errors::init_error;
@@ -18,6 +21,10 @@ impl Query {
         } else {
             Err(CouchbaseLiteError::CannotExecuteQuery(error))
         }
+    }
+
+    pub fn set_parameter_as_json(&mut self, json: &CStr) -> bool {
+        unsafe { ffi::CBLQuery_SetParametersAsJSON(self.query, json.as_ptr()) }
     }
 }
 
