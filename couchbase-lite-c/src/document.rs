@@ -39,7 +39,6 @@ impl Document {
         let mut error = init_error();
         let json_string = to_ptr(json);
         let status = unsafe { ffi::CBLDocument_SetPropertiesAsJSON(self.doc, json_string, &mut error) };
-        println!("jsonify {:?} - error: {:?}", status, error);
         if error.code == 0 {
             Ok(status)
         } else {
