@@ -650,4 +650,16 @@ mod tests {
         assert!(document.is_none());
     }
 
+    #[test]
+    fn open_close() {
+        use crate::log::*;
+        set_log_level(LogLevel::LogError, LogDomain::LogDomainAll);
+        let base_path = format!("{}/target/open_close", env!("CARGO_MANIFEST_DIR"));
+        std::fs::create_dir_all(&base_path).unwrap();
+        for _i in 0..10000 {
+            let dbname = Uuid::new_v4().to_string();
+            let database = Database::open(base_path.clone(), &dbname).unwrap();
+            database.close().unwrap();
+        }
+    }
 }
