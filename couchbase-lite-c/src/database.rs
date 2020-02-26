@@ -8,18 +8,15 @@ use crate::errors::CouchbaseLiteError;
 use crate::query::Query;
 
 use core::ptr;
-use std::cell::Cell;
 
 #[derive(Clone, Debug)]
 pub struct Database {
     pub db: *mut ffi::CBLDatabase,
-    open: Cell<bool>,   // this could just be a bool but then we'd have to
-                        //incompatibly change close signature to fn close(&mut self)
 }
 
 impl Database {
     fn from(db: *mut ffi::CBLDatabase) -> Self {
-        Database{ db, open: Cell::new(true) }
+        Database{ db }
     }
 
     pub fn open(directory: String, name: &str) -> Result<Self, CouchbaseLiteError> {
@@ -207,11 +204,10 @@ impl Database {
         Err(CouchbaseLiteError::ErrorInBatch(error))
     }
 
-    pub fn close(&self) -> Result<(), CouchbaseLiteError> {
+    pub fn close(self) -> Result<(), CouchbaseLiteError> {
         let mut error = init_error();
         let status = unsafe { ffi::CBLDatabase_Close(self.db, &mut error) };
         if error.code == 0 && status {
-            self.open.set(false);
             Ok(())
         } else {
             Err(CouchbaseLiteError::CannotCloseDatabase(error))
@@ -219,11 +215,10 @@ impl Database {
     }
 
     /// Deletes the (opened) database. After the database is deleted, the database object (self) is closed.
-    pub fn delete(&self) -> Result<(), CouchbaseLiteError> {
+    pub fn delete(self) -> Result<(), CouchbaseLiteError> {
         let mut error = init_error();
         let status = unsafe { ffi::CBLDatabase_Delete(self.db, &mut error) };
         if error.code == 0 && status {
-            self.open.set(false);
             Ok(())
         } else {
             Err(CouchbaseLiteError::CannotDeleteDatabase(error))
@@ -233,10 +228,6 @@ impl Database {
 
 impl Drop for Database {
     fn drop(&mut self) {
-        if self.open.get() {
-            let _ = self.close();
-            self.open.set(false);
-        }
         unsafe { ffi::CBL_Release(self.db as *mut ffi::CBLRefCounted) };
     }
 }
