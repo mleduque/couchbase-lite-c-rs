@@ -643,14 +643,20 @@ mod tests {
 
     #[test]
     fn open_close() {
-        use crate::log::*;
+        use crate::log::{set_log_level, LogLevel, LogDomain};
         set_log_level(LogLevel::LogError, LogDomain::LogDomainAll);
         let base_path = format!("{}/target/open_close", env!("CARGO_MANIFEST_DIR"));
         std::fs::create_dir_all(&base_path).unwrap();
-        for _i in 0..10000 {
+        for i in 0..10000 {
             let dbname = Uuid::new_v4().to_string();
             let database = Database::open(base_path.clone(), &dbname).unwrap();
+            let doc = database.create_document("whatever".to_string());
+            doc.fill(r#"{"prop": "value"}"#.to_string()).unwrap();
+            database.save_document(doc).unwrap();
             database.close().unwrap();
+            if i % 100 == 0 {
+                println!("{}", i);
+            }
         }
     }
 }
